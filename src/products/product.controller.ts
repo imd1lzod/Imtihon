@@ -25,16 +25,23 @@ export class ProductController {
         return await this.productService.getAll()
     }
 
+    @UseGuards(AuthGuard, RolesGuard)
+    @ApiBearerAuth()
+    @Protected(true)
+    @Roles([UserRoles.ADMIN, UserRoles.SUPER_ADMIN])
     @UsePipes()
     @UseInterceptors(FileInterceptor('image_url'))
     @ApiConsumes('multipart/form-data')
     @Post()
     async create(@Body() payload: CreateProductDto, @UploadedFile(new FileSizeValidationPipe, new FileTypeValidationPipe) file: Express.Multer.File) {
-        // console.log("salom");
         
         return await this.productService.create(payload, file)
     }
 
+    @UseGuards(AuthGuard, RolesGuard)
+    @ApiBearerAuth()
+    @Protected(true)
+    @Roles([UserRoles.ADMIN, UserRoles.SUPER_ADMIN])
     @UseInterceptors(FileInterceptor('image_url'))
     @ApiConsumes('multipart/form-data')
     @Put(':id')
@@ -42,6 +49,10 @@ export class ProductController {
         return await this.productService.update(payload, id, file)
     }
 
+    @UseGuards(AuthGuard, RolesGuard)
+    @ApiBearerAuth()
+    @Protected(true)
+    @Roles([UserRoles.ADMIN, UserRoles.SUPER_ADMIN])
     @Delete(':id')
     async delete(@Param('id', ParseIntPipe) id: number) {
         return await this.productService.delete(id)

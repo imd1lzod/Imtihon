@@ -18,6 +18,8 @@ export class ProductService implements OnModuleInit{
         const image = await this.fsHelper.uploadFile(file)
 
 
+        console.log(payload.price);
+        
         const result = await this.productModel.create({
             name: payload.name, description: payload.description, price: payload.price,
             discount: payload.discount, rating: payload.rating, stock: payload.stock, status: payload.status, image_url: image.data
@@ -48,7 +50,10 @@ export class ProductService implements OnModuleInit{
         if (!product) {
             throw new NotFoundException('Mahsulot topilmadi')
         }
-        await this.fsHelper.removeFile(product.dataValues.image_url)
+        if (product.dataValues.image_url) {
+            await this.fsHelper.removeFile(product.dataValues.image_url)
+        }
+        
 
         const image = await this.fsHelper.uploadFile(file)
 

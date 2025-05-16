@@ -27,7 +27,7 @@ export class AuthGuard implements CanActivate {
         }
 
         const token = request.headers['authorization']
-        // console.log(token);
+        console.log(token);
 
         if (!token) {
             throw new BadRequestException('Token mavjud emas')
@@ -39,7 +39,9 @@ export class AuthGuard implements CanActivate {
         }
 
         try {
-            const data = this.jwt.verify(accessToken)
+            const data = this.jwt.verify(accessToken, { secret: process.env.TOKEN_SECRET,  })
+            console.log(data);
+
 
             request.id = data.id
             request.role = data.role

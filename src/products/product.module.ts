@@ -6,12 +6,19 @@ import { SequelizeModule } from "@nestjs/sequelize";
 import { ProductModel } from "./model/product.model";
 import { AuthGuard } from "src/guards/check-auth-guard";
 import { RolesGuard } from "src/guards/check-roles-guard";
-import { JwtService } from "@nestjs/jwt";
+import { JwtModule, JwtService } from "@nestjs/jwt";
 
 @Module({
     imports: [
+        JwtModule.register({
+            secret: process.env.TOKEN_SECRET,
+            signOptions: {
+                expiresIn: process.env.TOKEN_SECRET_EXPIRE
+            }
+        }),
         SequelizeModule.forFeature([ProductModel], {logging: false})
     ],
+    exports: [JwtModule],
     controllers: [ProductController],
     providers: [ProductService, FsHelper, AuthGuard, RolesGuard, JwtService]
 })

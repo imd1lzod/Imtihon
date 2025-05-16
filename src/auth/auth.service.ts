@@ -33,11 +33,12 @@ export class AuthService implements OnModuleInit {
     async login(payload: LoginAuthDto) {
 
         const foundedUser = await this.userModel.findOne({ where: { email: payload.email } })
+        // console.log(foundedUser?.dataValues.role);
+        // console.log(foundedUser?.dataValues.id);
 
-        console.log("bu payload password", payload.password);
-        console.log("bu ozini passwordi", foundedUser?.dataValues.password);
-        
-        
+
+
+
         if (!foundedUser) {
             throw new NotFoundException('Foydalanuvchi topilmadi')
         }
@@ -48,13 +49,20 @@ export class AuthService implements OnModuleInit {
         if (!isUserMatch) {
             throw new ConflictException('Parol xato')
         }
+        // console.log(process.env.TOKEN_SECRET_EXPIRE);
 
-        const accessToken = this.jwtService.sign({ id: foundedUser.id, role: foundedUser.role })
+
+        const accessToken = this.jwtService.sign({ id: foundedUser.dataValues.id, role: foundedUser.dataValues.role }, {
+            secret: process.env.TOKEN_SECRET,
+            expiresIn: process.env.TOKEN_SECRET_EXPIRE
+        })
+        // console.log(accessToken);
+
 
         return {
             message: 'Foydalanuvchi muvaffaqiyatli tizimga kirdi',
             data: foundedUser,
-            token: accessToken
+            accessToken: accessToken
         }
     }
 

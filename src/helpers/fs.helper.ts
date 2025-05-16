@@ -25,6 +25,7 @@ export class FsHelper {
         console.log(file);
         
         
+        
             const filePath = path.join(process.cwd(), "uploads", file)
 
             if (fs.existsSync(filePath)) {

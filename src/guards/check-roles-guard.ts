@@ -14,10 +14,9 @@ export class RolesGuard implements CanActivate {
         const request = ctx.getRequest<
             Request & { role?: UserRoles; id?: string }
         >()
-
+        
         let userRole = request.role;
-
-
+       
         if (!userRole || !roles || !roles.includes(userRole)) {
             throw new ForbiddenException('Siz bu amalni bajara olmaysiz');
         }

@@ -1,5 +1,6 @@
 import { ApiProperty } from "@nestjs/swagger";
-import { IsString } from "class-validator";
+import { Transform } from "class-transformer";
+import { IsNumber, IsString } from "class-validator";
 
 export class UpdateProductDto {
     @ApiProperty({ example: 'Telefon', description: "Mahsulot nomi" })
@@ -11,19 +12,25 @@ export class UpdateProductDto {
     description?: string
 
     @ApiProperty({ example: 400, description: 'Mahsulot narxi' })
-    @IsString()
+    @Transform(({ value }) => Number(value))
+    @IsNumber()
     price?: number
 
     @ApiProperty({ example: 15, description: 'Chegirma' })
-    @IsString()
+    @Transform(({ value }) => Number(value))
+    @IsNumber()
+
     discount?: number
 
     @ApiProperty({ example: 5, description: 'Mahsulot reytingi' })
-    @IsString()
+    @Transform(({ value }) => Number(value))
+    @IsNumber()
+
     rating?: number
 
     @ApiProperty({ example: 100, description: 'Mahsulot soni' })
-    @IsString()
+    @Transform(({ value }) => Number(value))
+    @IsNumber()
     stock?: number
 
     @ApiProperty({ example: 'active', description: 'Mahsulot holati', })

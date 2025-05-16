@@ -14,9 +14,12 @@ import { JwtModule } from '@nestjs/jwt';
 @Module({
   imports: [
     JwtModule.register({
-      secret: 'www',
-      privateKey: "www",
+      secret: process.env.TOKEN_SECRET,
+      signOptions: {
+        expiresIn: process.env.TOKEN_SECRET_EXPIRE
+      }
     }),
+
     ServeStaticModule.forRoot({
       rootPath: join(process.cwd(), 'uploads'),
       serveRoot: '/uploads'
@@ -36,11 +39,12 @@ import { JwtModule } from '@nestjs/jwt';
       logging: false,
       sync: {
         alter: true,
-        force: true
       }
       // logging: false
     }), AuthModule, ProductModule
   ],
+  exports: [JwtModule],
+
 
 })
 export class AppModule { }
